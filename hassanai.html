@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Hassan AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+            text-align: center;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            padding: 20px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            margin-top: 20px;
+        }
+        footer {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Teacher Hassan AI</h1>
+        <p>Your AI teacher fluent in English, ready to help students of all levels!</p>
+    </header>
+    
+    <div class="container">
+        <div class="section">
+            <h2>Interact with Teacher Hassan AI</h2>
+            <button onclick="startListening()">Start Listening</button>
+            <p id="response">Press the button and ask a question!</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Teacher Hassan AI. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const responseElement = document.getElementById('response');
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        const synth = window.speechSynthesis;
+
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onresult = (event) => {
+            const question = event.results[0][0].transcript;
+            responseElement.textContent = You asked: ${question};
+            handleQuestion(question);
+        };
+
+        recognition.onerror = (event) => {
+            responseElement.textContent = Error: ${event.error};
+        };
+
+        function startListening() {
+            recognition.start();
+        }
+
+        function handleQuestion(question) {
+            // Basic responses; customize this with actual logic
+            let answer = '';
+            if (question.toLowerCase().includes('hello')) {
+                answer = 'Hello! How can I assist you today?';
+            } else if (question.toLowerCase().includes('name')) {
+                answer = 'I am Teacher Hassan AI, here to help you with your learning!';
+            } else if (question.toLowerCase().includes('english')) {
+                answer = 'I can help you with English at any level. What would you like to learn?';
+            } else {
+                answer = 'Sorry, I didn’t understand that. Can you ask something else?';
+            }
+
+            responseElement.textContent += \nAnswer: ${answer};
+            speak(answer);
+        }
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.onend = () => {
+                recognition.start(); // Restart listening after speaking
+            };
+            synth.speak(utterance);
+        }
+    </script>
+</body>
+</html>
